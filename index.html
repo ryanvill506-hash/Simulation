@@ -1,0 +1,2503 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Master - Mini Quiz Simulation System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
+
+      * {
+        font-family: "Poppins", sans-serif;
+      }
+
+      .fade-in {
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .slide-in {
+        animation: slideIn 0.4s ease-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .bounce-in {
+        animation: bounceIn 0.5s ease-out;
+      }
+
+      @keyframes bounceIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        70% {
+          transform: scale(1.05);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .card-hover:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .progress-bar {
+        height: 8px;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        border-radius: 10px;
+        transition: width 0.3s ease;
+      }
+
+      .pulse-animation {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <!-- HOMEPAGE -->
+    <section
+      id="homepage"
+      class="min-h-screen gradient-bg flex items-center justify-center"
+    >
+      <div class="container mx-auto px-4 py-20">
+        <div class="grid md:grid-cols-2 gap-12 items-center fade-in">
+          <div class="text-white">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+              Quiz <span class="text-yellow-300">Master</span>
+            </h1>
+            <p class="text-xl text-gray-100 mb-4">
+              Master Your Knowledge Across Multiple Domains
+            </p>
+            <p class="text-gray-200 mb-8 leading-relaxed">
+              Test your expertise in IT, Civil Engineering, Law, Psychology,
+              Pilot Studies, Marine Sciences, Agriculture, and Education.
+              Challenge yourself with 25 carefully crafted questions across 5
+              progressive levels. Get instant feedback, track your progress, and
+              identify areas for improvement.
+            </p>
+            <div class="flex flex-wrap gap-4 mb-8">
+              <div
+                class="bg-white bg-opacity-20 backdrop-blur px-6 py-3 rounded-lg"
+              >
+                <p class="font-bold text-2xl">25</p>
+                <p class="text-sm text-gray-100">Questions per Quiz</p>
+              </div>
+              <div
+                class="bg-white bg-opacity-20 backdrop-blur px-6 py-3 rounded-lg"
+              >
+                <p class="font-bold text-2xl">8</p>
+                <p class="text-sm text-gray-100">Field Categories</p>
+              </div>
+              <div
+                class="bg-white bg-opacity-20 backdrop-blur px-6 py-3 rounded-lg"
+              >
+                <p class="font-bold text-2xl">5</p>
+                <p class="text-sm text-gray-100">Progressive Levels</p>
+              </div>
+            </div>
+            <button
+              onclick="goToSelection()"
+              class="bg-yellow-400 hover:bg-yellow-500 text-purple-900 font-bold py-4 px-8 rounded-lg text-lg transition transform hover:scale-105 shadow-lg"
+            >
+              Start Quiz 🚀
+            </button>
+          </div>
+          <div class="hidden md:block">
+            <div class="relative">
+              <div
+                class="absolute inset-0 bg-white opacity-10 rounded-3xl blur-3xl"
+              ></div>
+              <div
+                class="relative bg-white bg-opacity-10 backdrop-blur-md p-8 rounded-3xl border border-white border-opacity-20"
+              >
+                <div class="space-y-4">
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center font-bold text-purple-900"
+                    >
+                      ✓
+                    </div>
+                    <p class="text-white">Instant Feedback on Answers</p>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center font-bold text-purple-900"
+                    >
+                      ✓
+                    </div>
+                    <p class="text-white">Level-based Milestones</p>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center font-bold text-purple-900"
+                    >
+                      ✓
+                    </div>
+                    <p class="text-white">Randomized Questions</p>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center font-bold text-purple-900"
+                    >
+                      ✓
+                    </div>
+                    <p class="text-white">Detailed Results Analysis</p>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center font-bold text-purple-900"
+                    >
+                      ✓
+                    </div>
+                    <p class="text-white">Retake with New Questions</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ SELECTION -->
+    <section id="quiz-selection" class="min-h-screen bg-gray-50 py-20 hidden">
+      <div class="container mx-auto px-4">
+        <div class="mb-12 text-center fade-in">
+          <h1 class="text-5xl font-bold text-gray-900 mb-4">
+            Choose Your Field
+          </h1>
+          <p class="text-gray-600 text-lg">
+            Select a category to begin your 25-question quiz
+          </p>
+        </div>
+
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 fade-in"
+        >
+          <div
+            class="category-card card-hover cursor-pointer bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition transform"
+            onclick="startQuiz('IT')"
+          >
+            <div class="text-5xl mb-4">💻</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">IT</h3>
+            <p class="text-gray-600 text-sm">Information Technology</p>
+          </div>
+
+          <div
+            class="category-card card-hover cursor-pointer bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition transform"
+            onclick="startQuiz('Civil Engineering')"
+          >
+            <div class="text-5xl mb-4">🏗️</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Civil</h3>
+            <p class="text-gray-600 text-sm">Civil Engineering</p>
+          </div>
+
+          <div
+            class="category-card card-hover cursor-pointer bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition transform"
+            onclick="startQuiz('Law')"
+          >
+            <div class="text-5xl mb-4">⚖️</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Law</h3>
+            <p class="text-gray-600 text-sm">Legal Studies</p>
+          </div>
+
+          <div
+            class="category-card card-hover cursor-pointer bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition transform"
+            onclick="startQuiz('Psychology')"
+          >
+            <div class="text-5xl mb-4">🧠</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Psychology</h3>
+            <p class="text-gray-600 text-sm">Behavioral Sciences</p>
+          </div>
+
+          <div
+            class="category-card card-hover cursor-pointer bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition transform"
+            onclick="startQuiz('Pilot')"
+          >
+            <div class="text-5xl mb-4">✈️</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Pilot</h3>
+            <p class="text-gray-600 text-sm">Aviation Studies</p>
+          </div>
+
+          <div
+            class="category-card card-hover cursor-pointer bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition transform"
+            onclick="startQuiz('Marine')"
+          >
+            <div class="text-5xl mb-4">🌊</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Marine</h3>
+            <p class="text-gray-600 text-sm">Marine Sciences</p>
+          </div>
+
+          <div
+            class="category-card card-hover cursor-pointer bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition transform"
+            onclick="startQuiz('Agriculture')"
+          >
+            <div class="text-5xl mb-4">🌾</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Agriculture</h3>
+            <p class="text-gray-600 text-sm">Agricultural Sciences</p>
+          </div>
+
+          <div
+            class="category-card card-hover cursor-pointer bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition transform"
+            onclick="startQuiz('Education')"
+          >
+            <div class="text-5xl mb-4">🎓</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Education</h3>
+            <p class="text-gray-600 text-sm">Educational Studies</p>
+          </div>
+        </div>
+
+        <div class="mt-12 text-center">
+          <button
+            onclick="goToHomepage()"
+            class="bg-gray-300 hover:bg-gray-400 text-gray-900 font-bold py-3 px-8 rounded-lg transition"
+          >
+            ← Back to Home
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ PAGE -->
+    <section id="quiz-page" class="min-h-screen bg-gray-50 py-20 hidden">
+      <div class="container mx-auto px-4 max-w-3xl">
+        <!-- Progress Bar -->
+        <div class="mb-8 fade-in">
+          <div class="flex justify-between items-center mb-4">
+            <div>
+              <h2 class="text-2xl font-bold text-gray-900" id="quiz-field">
+                Quiz Field
+              </h2>
+              <p class="text-gray-600" id="question-counter">
+                Question 1 of 25
+              </p>
+            </div>
+            <div class="text-right">
+              <p class="text-gray-600">Progress</p>
+              <p
+                class="text-3xl font-bold text-purple-600"
+                id="progress-percentage"
+              >
+                0%
+              </p>
+            </div>
+          </div>
+          <div class="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
+            <div id="progress-bar" class="progress-bar w-0"></div>
+          </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 fade-in">
+          <div class="mb-6">
+            <h3
+              class="text-2xl font-bold text-gray-900 mb-4"
+              id="question-text"
+            >
+              Question text goes here
+            </h3>
+            <div class="flex flex-wrap gap-2">
+              <span
+                class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-semibold"
+                id="level-badge"
+                >Level 1</span
+              >
+            </div>
+          </div>
+
+          <!-- Options -->
+          <div class="space-y-3" id="options-container">
+            <!-- Options will be dynamically inserted here -->
+          </div>
+
+          <!-- Navigation -->
+          <div class="flex justify-between mt-8">
+            <button
+              onclick="previousQuestion()"
+              class="bg-gray-300 hover:bg-gray-400 text-gray-900 font-bold py-3 px-6 rounded-lg transition disabled:opacity-50"
+              id="prev-btn"
+            >
+              ← Previous
+            </button>
+            <button
+              onclick="nextQuestion()"
+              class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition"
+              id="next-btn"
+            >
+              Next →
+            </button>
+          </div>
+        </div>
+
+        <!-- Question Navigation Dots -->
+        <div
+          class="flex flex-wrap gap-2 justify-center mb-6"
+          id="question-dots"
+        >
+          <!-- Dots will be dynamically inserted here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- LEVEL COMPLETE MODAL -->
+    <div
+      id="level-modal"
+      class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
+    >
+      <div
+        class="bg-white rounded-3xl p-8 max-w-md text-center bounce-in shadow-2xl"
+      >
+        <div class="text-6xl mb-4 pulse-animation">🎉</div>
+        <h2 class="text-3xl font-bold text-gray-900 mb-2" id="level-title">
+          Level 1 Complete!
+        </h2>
+        <p class="text-gray-600 mb-6">You're doing amazing!</p>
+        <div
+          class="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6 mb-6"
+        >
+          <p class="text-gray-600 text-sm mb-1">Your Score</p>
+          <p class="text-4xl font-bold text-purple-600" id="level-score">4/5</p>
+        </div>
+        <button
+          onclick="closeLevelModal()"
+          class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition"
+        >
+          Continue →
+        </button>
+      </div>
+    </div>
+
+    <!-- RESULTS PAGE -->
+    <section id="results-page" class="min-h-screen bg-gray-50 py-20 hidden">
+      <div class="container mx-auto px-4 max-w-4xl">
+        <!-- Final Score Card -->
+        <div
+          class="gradient-bg rounded-3xl p-12 text-white text-center mb-12 fade-in shadow-xl"
+        >
+          <p class="text-xl mb-2 opacity-90">Quiz Completed!</p>
+          <h1 class="text-5xl font-bold mb-4" id="final-score">20/25</h1>
+          <p class="text-3xl font-bold mb-2" id="score-percentage">80%</p>
+          <div class="w-full bg-white bg-opacity-20 rounded-full h-2 mt-4">
+            <div
+              id="final-progress-bar"
+              class="bg-yellow-400 h-2 rounded-full"
+              style="width: 80%"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Performance Analysis -->
+        <div class="grid md:grid-cols-3 gap-6 mb-12">
+          <div class="bg-white rounded-2xl p-6 shadow-lg">
+            <p class="text-gray-600 text-sm mb-2">Correct Answers</p>
+            <p class="text-3xl font-bold text-green-600" id="correct-count">
+              20
+            </p>
+          </div>
+          <div class="bg-white rounded-2xl p-6 shadow-lg">
+            <p class="text-gray-600 text-sm mb-2">Wrong Answers</p>
+            <p class="text-3xl font-bold text-red-600" id="wrong-count">5</p>
+          </div>
+          <div class="bg-white rounded-2xl p-6 shadow-lg">
+            <p class="text-gray-600 text-sm mb-2">Performance</p>
+            <p class="text-3xl font-bold text-purple-600" id="performance">
+              Excellent
+            </p>
+          </div>
+        </div>
+
+        <!-- All Questions Review -->
+        <div class="mb-12">
+          <h2 class="text-3xl font-bold text-gray-900 mb-6">
+            Review Your Answers
+          </h2>
+          <div class="space-y-4" id="review-container">
+            <!-- Questions will be dynamically inserted here -->
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+          <button
+            onclick="tryDifferentQuiz()"
+            class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded-lg transition text-lg"
+          >
+            ↻ Try a Different Quiz
+          </button>
+          <button
+            onclick="goToHomepage()"
+            class="bg-gray-300 hover:bg-gray-400 text-gray-900 font-bold py-4 px-8 rounded-lg transition text-lg"
+          >
+            ← Back to Home
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // Quiz Data Structure
+      const quizData = {
+        IT: [
+          {
+            question: "What does CPU stand for?",
+            options: [
+              "Central Processing Unit",
+              "Central Program Utility",
+              "Computer Personal Unit",
+              "Central Processing Utility",
+            ],
+            correct: 0,
+          },
+          {
+            question:
+              "Which programming language is known for web development?",
+            options: ["Python", "JavaScript", "Java", "C++"],
+            correct: 1,
+          },
+          {
+            question: "What is the full form of HTTP?",
+            options: [
+              "HyperText Transmission Protocol",
+              "HyperText Transfer Protocol",
+              "Home Text Transfer Protocol",
+              "Hyper Transfer Text Protocol",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which data structure uses LIFO principle?",
+            options: ["Queue", "Stack", "Array", "Tree"],
+            correct: 1,
+          },
+          {
+            question: "What is the main function of RAM?",
+            options: [
+              "Store permanent data",
+              "Store temporary data during execution",
+              "Process data",
+              "Display data",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which of the following is a NoSQL database?",
+            options: ["MySQL", "PostgreSQL", "MongoDB", "Oracle"],
+            correct: 2,
+          },
+          {
+            question: "What does API stand for?",
+            options: [
+              "Application Programming Interface",
+              "Application Process Interface",
+              "Applied Programming Integration",
+              "Application Protocol Interface",
+            ],
+            correct: 0,
+          },
+          {
+            question:
+              "Which sorting algorithm has the best average-case time complexity?",
+            options: [
+              "Bubble Sort",
+              "Insertion Sort",
+              "Merge Sort",
+              "Selection Sort",
+            ],
+            correct: 2,
+          },
+          {
+            question: "What is the time complexity of binary search?",
+            options: ["O(n)", "O(log n)", "O(n²)", "O(1)"],
+            correct: 1,
+          },
+          {
+            question: "Which of these is a compiled language?",
+            options: ["Python", "JavaScript", "C++", "PHP"],
+            correct: 2,
+          },
+          {
+            question: "What does CSS stand for?",
+            options: [
+              "Computer Style Sheet",
+              "Cascading Style Sheet",
+              "Creative Style Sheet",
+              "Coded Style Sheet",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which data structure is best for implementing a cache?",
+            options: ["Stack", "Queue", "Hash Table", "Linked List"],
+            correct: 2,
+          },
+          {
+            question: "What is the primary purpose of version control systems?",
+            options: [
+              "Store files",
+              "Track changes and manage code versions",
+              "Delete files",
+              "Compile code",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which protocol is used for sending emails?",
+            options: ["HTTP", "FTP", "SMTP", "DNS"],
+            correct: 2,
+          },
+          {
+            question: "What does SQL stand for?",
+            options: [
+              "Standard Query Language",
+              "Structured Query Language",
+              "Simple Query Language",
+              "Sequential Query Language",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which of the following is NOT an OOP concept?",
+            options: [
+              "Inheritance",
+              "Polymorphism",
+              "Encapsulation",
+              "Fragmentation",
+            ],
+            correct: 3,
+          },
+          {
+            question:
+              "What is the maximum value a 32-bit signed integer can hold?",
+            options: [
+              "2,147,483,647",
+              "4,294,967,295",
+              "1,073,741,823",
+              "536,870,911",
+            ],
+            correct: 0,
+          },
+          {
+            question: "Which of these is a relational database?",
+            options: ["MongoDB", "Cassandra", "MySQL", "Redis"],
+            correct: 2,
+          },
+          {
+            question: 'What does the "async" keyword do in JavaScript?',
+            options: [
+              "Makes a function synchronous",
+              "Makes a function return a Promise",
+              "Stops code execution",
+              "Runs code in parallel",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which is NOT a valid JavaScript data type?",
+            options: ["String", "Number", "Char", "Boolean"],
+            correct: 2,
+          },
+          {
+            question: "What is the purpose of garbage collection?",
+            options: [
+              "Delete old files",
+              "Automatically free unused memory",
+              "Compile code",
+              "Optimize performance",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which algorithm is used for finding shortest paths?",
+            options: [
+              "Quick Sort",
+              "Dijkstra's Algorithm",
+              "Bubble Sort",
+              "Binary Search",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What does JSON stand for?",
+            options: [
+              "Java Serial Object Notation",
+              "JavaScript Object Notation",
+              "Java Standard Object Notation",
+              "JavaScript Oriented Notation",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which of these has the fastest access time?",
+            options: ["SSD", "Hard Disk", "RAM", "Optical Drive"],
+            correct: 2,
+          },
+          {
+            question: "What is the primary goal of cybersecurity?",
+            options: [
+              "Prevent all attacks",
+              "Protect data and systems from unauthorized access",
+              "Use firewalls only",
+              "Monitor networks",
+            ],
+            correct: 1,
+          },
+        ],
+        "Civil Engineering": [
+          {
+            question: "What is the main function of a Foundation?",
+            options: [
+              "Provide aesthetic appeal",
+              "Transfer building load to the ground",
+              "Provide ventilation",
+              "Act as a floor",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which type of beam is fixed at both ends?",
+            options: [
+              "Simply supported",
+              "Cantilever",
+              "Fixed beam",
+              "Continuous beam",
+            ],
+            correct: 2,
+          },
+          {
+            question: "What does PSI stand for in concrete testing?",
+            options: [
+              "Pounds per Square Inch",
+              "Pressure Strength Index",
+              "Pressure Standard Index",
+              "Pounds Strength Indicator",
+            ],
+            correct: 0,
+          },
+          {
+            question:
+              "Which is the most common type of brick used in construction?",
+            options: [
+              "Hollow brick",
+              "Solid brick",
+              "Glass brick",
+              "Interlocking brick",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is the slump test used for?",
+            options: [
+              "Testing brick quality",
+              "Testing concrete workability",
+              "Testing steel strength",
+              "Testing aggregate size",
+            ],
+            correct: 1,
+          },
+          {
+            question:
+              "Which standard specifies building codes in most countries?",
+            options: [
+              "ISO 9001",
+              "NBC (National Building Code)",
+              "ASTM",
+              "AISC",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is the purpose of reinforcement in concrete?",
+            options: [
+              "Reduce cost",
+              "Improve tensile strength",
+              "Improve color",
+              "Reduce weight",
+            ],
+            correct: 1,
+          },
+          {
+            question:
+              "Which type of road failure occurs due to repeated loading?",
+            options: [
+              "Rutting",
+              "Pothole",
+              "Fatigue cracking",
+              "All of the above",
+            ],
+            correct: 3,
+          },
+          {
+            question: "What is the optimal water-cement ratio for concrete?",
+            options: ["0.2", "0.4", "0.6", "0.8"],
+            correct: 1,
+          },
+          {
+            question: "Which material has the highest compressive strength?",
+            options: ["Steel", "Concrete", "Brick", "Stone"],
+            correct: 1,
+          },
+          {
+            question: "What is the purpose of expansion joints in buildings?",
+            options: [
+              "Aesthetic purposes",
+              "Allow movement due to temperature changes",
+              "Structural support",
+              "Sound insulation",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which type of foundation is used on weak soil?",
+            options: [
+              "Spread foundation",
+              "Pile foundation",
+              "Raft foundation",
+              "Strip foundation",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is the angle of repose?",
+            options: [
+              "Angle of stress",
+              "Maximum angle at which soil won't slide",
+              "Angle of foundation",
+              "Angle of load",
+            ],
+            correct: 1,
+          },
+          {
+            question:
+              "Which steel grade is most commonly used in construction?",
+            options: ["Fe 250", "Fe 415", "Fe 550", "Fe 600"],
+            correct: 1,
+          },
+          {
+            question: "What is the Modulus of Elasticity for concrete?",
+            options: [
+              "20,000 N/mm²",
+              "30,000 N/mm²",
+              "200,000 N/mm²",
+              "2,000 N/mm²",
+            ],
+            correct: 1,
+          },
+          {
+            question:
+              "Which test is used to determine the bearing capacity of soil?",
+            options: [
+              "Proctor test",
+              "Plate load test",
+              "Atterberg limits test",
+              "Sieve analysis",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is the safe bearing capacity of medium sand?",
+            options: ["10 kN/m²", "50 kN/m²", "100 kN/m²", "200 kN/m²"],
+            correct: 2,
+          },
+          {
+            question:
+              "Which is the most durable type of paint for external surfaces?",
+            options: [
+              "Distemper",
+              "Enamel paint",
+              "Acrylic paint",
+              "Cement paint",
+            ],
+            correct: 2,
+          },
+          {
+            question: "What is the purpose of a tie beam?",
+            options: [
+              "Support the roof",
+              "Connect isolated footings",
+              "Support columns",
+              "Support walls",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which of these is a non-destructive test?",
+            options: [
+              "Compression test",
+              "Ultrasonic pulse velocity test",
+              "Tensile test",
+              "Bending test",
+            ],
+            correct: 1,
+          },
+          {
+            question:
+              "What is the minimum clear cover for reinforcement in columns?",
+            options: ["20 mm", "30 mm", "40 mm", "50 mm"],
+            correct: 2,
+          },
+          {
+            question: "Which type of concrete is used in marine structures?",
+            options: [
+              "Ordinary concrete",
+              "High-strength concrete",
+              "Marine concrete",
+              "Sulfate-resistant concrete",
+            ],
+            correct: 3,
+          },
+          {
+            question:
+              "What is the normal compressive strength of M20 concrete at 28 days?",
+            options: ["15 N/mm²", "20 N/mm²", "25 N/mm²", "30 N/mm²"],
+            correct: 1,
+          },
+          {
+            question: "Which is the most economical span for RCC beams?",
+            options: ["2-3 m", "4-6 m", "8-10 m", "12-15 m"],
+            correct: 1,
+          },
+          {
+            question:
+              "What is the primary purpose of a wet mix macadam in road construction?",
+            options: [
+              "Base course",
+              "Surface course",
+              "Sub-base",
+              "Binder course",
+            ],
+            correct: 2,
+          },
+        ],
+        Law: [
+          {
+            question: "What is the rule of law?",
+            options: [
+              "Laws made by rulers",
+              "Everyone is subject to law",
+              "Laws can be broken",
+              "Only rich follow laws",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which of the following is NOT a type of law?",
+            options: [
+              "Constitutional Law",
+              "Criminal Law",
+              "Civil Law",
+              "Abstract Law",
+            ],
+            correct: 3,
+          },
+          {
+            question: "What is the maximum punishment for a misdemeanor?",
+            options: [
+              "Death penalty",
+              "Less than 1 year imprisonment",
+              "5 years imprisonment",
+              "Life imprisonment",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Who has the power to veto laws in most democracies?",
+            options: [
+              "President/Head of State",
+              "Prime Minister",
+              "Parliament",
+              "Supreme Court",
+            ],
+            correct: 0,
+          },
+          {
+            question: 'What is the principle of "Mens Rea"?',
+            options: [
+              "Physical act",
+              "Criminal intent",
+              "Punishment",
+              "Evidence",
+            ],
+            correct: 1,
+          },
+          {
+            question:
+              "What type of law deals with disputes between individuals or organizations?",
+            options: [
+              "Criminal Law",
+              "Civil Law",
+              "Constitutional Law",
+              "Administrative Law",
+            ],
+            correct: 1,
+          },
+          {
+            question: 'What is the "Writ of Habeas Corpus"?',
+            options: [
+              "Right to property",
+              "Right to freedom from unlawful detention",
+              "Right to work",
+              "Right to education",
+            ],
+            correct: 1,
+          },
+          {
+            question:
+              "Which principle states that a person cannot be punished twice for the same offense?",
+            options: [
+              "Res Judicata",
+              "Double Jeopardy",
+              "Nolo Contendere",
+              "Pro Bono",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is the burden of proof in criminal cases?",
+            options: [
+              "Balance of probabilities",
+              "Beyond reasonable doubt",
+              "Preponderance of evidence",
+              "Clear and convincing",
+            ],
+            correct: 1,
+          },
+          {
+            question:
+              "Which right is NOT a fundamental right in most democracies?",
+            options: [
+              "Right to free speech",
+              "Right to free education",
+              "Right to bear arms",
+              "Right to property",
+            ],
+            correct: 2,
+          },
+          {
+            question: 'What is a "Power of Attorney"?',
+            options: [
+              "Authority to make legal documents",
+              "Legal authority to act on behalf of another",
+              "Power given by government",
+              "Authority to arrest",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is the statute of limitations?",
+            options: [
+              "Law that cannot be changed",
+              "Time limit for filing a lawsuit",
+              "Law passed by the state",
+              "Law of inheritance",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which is NOT a source of law?",
+            options: [
+              "Legislation",
+              "Court decisions",
+              "Custom",
+              "Dictionary definitions",
+            ],
+            correct: 3,
+          },
+          {
+            question: 'What does "Caveat Emptor" mean?',
+            options: [
+              "Let the buyer beware",
+              "Let the seller decide",
+              "Contract is void",
+              "Agreement is final",
+            ],
+            correct: 0,
+          },
+          {
+            question: "What is the main purpose of constitutional law?",
+            options: [
+              "Define government structure",
+              "Create business contracts",
+              "Settle disputes",
+              "Punish criminals",
+            ],
+            correct: 0,
+          },
+          {
+            question: "What is legal capacity?",
+            options: [
+              "Ability to file a lawsuit",
+              "Ability to enter into a contract",
+              "Ability to own property",
+              "All of the above",
+            ],
+            correct: 3,
+          },
+          {
+            question:
+              'Which principle means "the law does not care about trifles"?',
+            options: [
+              "De Minimis Non Curat Lex",
+              "Stare Decisis",
+              "Res Judicata",
+              "Amicus Curiae",
+            ],
+            correct: 0,
+          },
+          {
+            question: "What is an indictment?",
+            options: [
+              "Verdict from jury",
+              "Formal accusation",
+              "Court order",
+              "Legal opinion",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is the right to due process?",
+            options: [
+              "Right to own property",
+              "Fair and just legal procedures",
+              "Right to vote",
+              "Right to work",
+            ],
+            correct: 1,
+          },
+          {
+            question:
+              "What type of contract requires consideration from both parties?",
+            options: [
+              "Unilateral contract",
+              "Bilateral contract",
+              "Void contract",
+              "Executed contract",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is judicial review?",
+            options: [
+              "Review by judges of sentences",
+              "Power of courts to review laws",
+              "Review of evidence",
+              "Review by jury",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which of these is a crime against the state?",
+            options: ["Murder", "Theft", "Treason", "Robbery"],
+            correct: 2,
+          },
+          {
+            question: "What is the purpose of arbitration?",
+            options: [
+              "To punish criminals",
+              "Alternative method to resolve disputes",
+              "To create new laws",
+              "To amend constitution",
+            ],
+            correct: 1,
+          },
+          {
+            question: 'What is a "Class Action Lawsuit"?',
+            options: [
+              "Lawsuit by rich people",
+              "Lawsuit filed by a group of people",
+              "Lawsuit for discrimination",
+              "Lawsuit filed by lawyers",
+            ],
+            correct: 1,
+          },
+          {
+            question: 'What does "Pro Bono" mean?',
+            options: [
+              "For profit",
+              "For public good without payment",
+              "Professional bonus",
+              "Public notice",
+            ],
+            correct: 1,
+          },
+        ],
+        Psychology: [
+          {
+            question: "Who is known as the founder of behaviorism?",
+            options: [
+              "Sigmund Freud",
+              "B.F. Skinner",
+              "Ivan Pavlov",
+              "John B. Watson",
+            ],
+            correct: 3,
+          },
+          {
+            question: 'What is the "fight or flight" response?',
+            options: [
+              "Psychiatric disorder",
+              "Cognitive bias",
+              "Stress response",
+              "Learning mechanism",
+            ],
+            correct: 2,
+          },
+          {
+            question:
+              "Which neurotransmitter is associated with mood regulation?",
+            options: ["Dopamine", "Serotonin", "Acetylcholine", "Glutamate"],
+            correct: 1,
+          },
+          {
+            question: "What is cognitive dissonance?",
+            options: [
+              "Multiple personality disorder",
+              "Inability to think",
+              "Conflict between attitudes and behavior",
+              "Memory loss",
+            ],
+            correct: 2,
+          },
+          {
+            question: "Who developed the theory of multiple intelligences?",
+            options: [
+              "Howard Gardner",
+              "Carol Dweck",
+              "Albert Bandura",
+              "Jean Piaget",
+            ],
+            correct: 0,
+          },
+          {
+            question: 'What is the "bystander effect"?',
+            options: [
+              "Effect of location",
+              "Tendency to not help when others are present",
+              "Group decision making",
+              "Social facilitation",
+            ],
+            correct: 1,
+          },
+          {
+            question:
+              "Which type of conditioning involves learning through imitation?",
+            options: [
+              "Classical conditioning",
+              "Operant conditioning",
+              "Observational learning",
+              "Habituation",
+            ],
+            correct: 2,
+          },
+          {
+            question: 'What is "metacognition"?',
+            options: [
+              "Thinking about thinking",
+              "Multiple personalities",
+              "Memory disorders",
+              "Attention disorders",
+            ],
+            correct: 0,
+          },
+          {
+            question: "Who developed the Hierarchy of Needs?",
+            options: [
+              "Carl Rogers",
+              "Abraham Maslow",
+              "Albert Ellis",
+              "Viktor Frankl",
+            ],
+            correct: 1,
+          },
+          {
+            question: 'What is "self-efficacy"?',
+            options: [
+              "Self-awareness",
+              "Belief in one's ability to succeed",
+              "Self-esteem",
+              "Self-concept",
+            ],
+            correct: 1,
+          },
+          {
+            question:
+              "Which lobe of the brain is responsible for motor control?",
+            options: [
+              "Temporal lobe",
+              "Occipital lobe",
+              "Frontal lobe",
+              "Parietal lobe",
+            ],
+            correct: 2,
+          },
+          {
+            question: 'What is "groupthink"?',
+            options: [
+              "Individual thinking",
+              "Desire for harmony in groups",
+              "Conflict resolution",
+              "Leadership style",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Who developed the theory of cognitive development?",
+            options: [
+              "Jean Piaget",
+              "Erik Erikson",
+              "Lev Vygotsky",
+              "John Bowlby",
+            ],
+            correct: 0,
+          },
+          {
+            question: 'What is "projection" in psychology?',
+            options: [
+              "Making plans",
+              "Attributing own traits to others",
+              "Remembering the past",
+              "Imagining the future",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which is NOT a defense mechanism?",
+            options: ["Denial", "Rationalization", "Repression", "Integration"],
+            correct: 3,
+          },
+          {
+            question: 'What is "operant conditioning"?',
+            options: [
+              "Learning through observation",
+              "Learning through consequences",
+              "Learning through association",
+              "Learning through insight",
+            ],
+            correct: 1,
+          },
+          {
+            question: 'What does "nature vs nurture" debate concern?',
+            options: [
+              "Genetic vs environmental influences",
+              "City vs countryside",
+              "Young vs old",
+              "Male vs female",
+            ],
+            correct: 0,
+          },
+          {
+            question: 'What is "attrition" in research?',
+            options: [
+              "Participant dropout",
+              "Data loss",
+              "Memory loss",
+              "Statistical error",
+            ],
+            correct: 0,
+          },
+          {
+            question:
+              "Which therapy focuses on changing negative thought patterns?",
+            options: [
+              "Psychoanalysis",
+              "Cognitive Behavioral Therapy",
+              "Humanistic therapy",
+              "Gestalt therapy",
+            ],
+            correct: 1,
+          },
+          {
+            question: 'What is the "placebo effect"?',
+            options: [
+              "Therapeutic effect of dummy treatment",
+              "Drug effectiveness",
+              "Medical error",
+              "Psychological disorder",
+            ],
+            correct: 0,
+          },
+          {
+            question: "Who developed attachment theory?",
+            options: [
+              "John Bowlby",
+              "Mary Ainsworth",
+              "Donald Winnicott",
+              "Melanie Klein",
+            ],
+            correct: 0,
+          },
+          {
+            question: 'What is "confirmation bias"?',
+            options: [
+              "Bias towards confirmation",
+              "Tendency to seek info confirming beliefs",
+              "Bias in statistics",
+              "Measurement error",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is the main focus of humanistic psychology?",
+            options: [
+              "Unconscious mind",
+              "Personal growth and potential",
+              "Behavior and environment",
+              "Neurobiology",
+            ],
+            correct: 1,
+          },
+          {
+            question: 'What is "procedural memory"?',
+            options: [
+              "Semantic memory",
+              "Memory for skills and procedures",
+              "Episodic memory",
+              "Working memory",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which brain structure is crucial for memory formation?",
+            options: ["Amygdala", "Hippocampus", "Cerebellum", "Thalamus"],
+            correct: 1,
+          },
+        ],
+        Pilot: [
+          {
+            question: "What is the primary purpose of the pitot tube?",
+            options: [
+              "Measure altitude",
+              "Measure airspeed",
+              "Measure temperature",
+              "Measure pressure altitude",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which altitude is measured from Mean Sea Level?",
+            options: [
+              "Absolute altitude",
+              "Indicated altitude",
+              "True altitude",
+              "Pressure altitude",
+            ],
+            correct: 3,
+          },
+          {
+            question: "What does NOTAM stand for?",
+            options: [
+              "Notice to Airmen",
+              "Notice to Airports",
+              "Notice of Traffic Alerts",
+              "Not Official Traffic Alert",
+            ],
+            correct: 0,
+          },
+          {
+            question: "What is the standard lapse rate in the troposphere?",
+            options: [
+              "5.5°C per 1000 ft",
+              "6.5°C per 1000 m",
+              "2°C per 1000 ft",
+              "3.5°C per 1000 m",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which aircraft control surface manages pitch?",
+            options: ["Ailerons", "Rudder", "Elevator", "Flaps"],
+            correct: 2,
+          },
+          {
+            question: "What is angle of attack?",
+            options: [
+              "Aircraft heading",
+              "Angle between wing and airflow",
+              "Angle of descent",
+              "Runway angle",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which type of airfoil generates lift?",
+            options: [
+              "Flat bottom",
+              "Asymmetrical with curved upper surface",
+              "Symmetrical",
+              "Curved bottom",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is density altitude?",
+            options: [
+              "True altitude",
+              "Indicated altitude",
+              "Pressure altitude adjusted for temperature",
+              "Absolute altitude",
+            ],
+            correct: 2,
+          },
+          {
+            question: "What does VFR stand for?",
+            options: [
+              "Visual Flight Regulations",
+              "Visual Flight Rules",
+              "Vertical Flight Rate",
+              "Vertical Flight Rules",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is the typical landing distance requirement?",
+            options: [
+              "500 meters",
+              "1000 meters",
+              "1500 meters",
+              "Depends on aircraft",
+            ],
+            correct: 3,
+          },
+          {
+            question: "Which instrument shows bank angle?",
+            options: [
+              "Altimeter",
+              "Airspeed indicator",
+              "Attitude indicator",
+              "Heading indicator",
+            ],
+            correct: 2,
+          },
+          {
+            question: "What is wind shear?",
+            options: [
+              "Wind direction",
+              "Sudden wind speed/direction change",
+              "High winds",
+              "Crosswind effect",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What does ADS-B stand for?",
+            options: [
+              "Automatic Dependent Surveillance Broadcast",
+              "Altitude Detection System",
+              "Aircraft Detection Surveillance",
+              "Automatic Direction Broadcasting",
+            ],
+            correct: 0,
+          },
+          {
+            question:
+              "Which runways are typically used for takeoff and landing?",
+            options: [
+              "Cross-wind runways",
+              "Into-wind runways",
+              "Any runway",
+              "Longest runway",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is a stall?",
+            options: [
+              "Engine failure",
+              "Loss of lift due to excessive angle of attack",
+              "Temporary halt",
+              "Descent rate",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is crosswind limit for most commercial aircraft?",
+            options: ["10 knots", "25 knots", "15 knots", "Varies by aircraft"],
+            correct: 3,
+          },
+          {
+            question: "What does ICAO stand for?",
+            options: [
+              "International Civil Aviation Organization",
+              "International Committee for Aviation",
+              "International Civil Air Operations",
+              "Integrated Civil Aviation Organization",
+            ],
+            correct: 0,
+          },
+          {
+            question: "What is transponder code 7700?",
+            options: [
+              "Normal flight",
+              "Emergency distress",
+              "Radio failure",
+              "Radar failure",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which system prevents mid-air collisions?",
+            options: ["Radar", "TCAS", "ADS-B", "Transponder"],
+            correct: 1,
+          },
+          {
+            question: "What is the standard atmosphere pressure at sea level?",
+            options: ["29.92 inHg", "30.92 inHg", "28.92 inHg", "31.92 inHg"],
+            correct: 0,
+          },
+          {
+            question: 'What is a "hold"?',
+            options: [
+              "Emergency landing",
+              "Waiting pattern",
+              "Climb procedure",
+              "Descent procedure",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which type of weather radar shows precipitation?",
+            options: [
+              "Reflectivity",
+              "Velocity",
+              "Turbulence",
+              "All of the above",
+            ],
+            correct: 0,
+          },
+          {
+            question: "What is lift generated by?",
+            options: [
+              "Engine thrust",
+              "Air pressure difference",
+              "Speed alone",
+              "Weight distribution",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What does MAYDAY indicate?",
+            options: [
+              "Mild concern",
+              "Distress signal",
+              "Engine concern",
+              "Navigation issue",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is the correct sequence for landing?",
+            options: [
+              "Approach, descent, flare, touchdown",
+              "Descent, approach, touchdown, flare",
+              "Flare, approach, descent, touchdown",
+              "Touchdown, flare, descent, approach",
+            ],
+            correct: 0,
+          },
+        ],
+        Marine: [
+          {
+            question: "What is the largest ocean on Earth?",
+            options: ["Atlantic", "Indian", "Arctic", "Pacific"],
+            correct: 3,
+          },
+          {
+            question: "What is the average salinity of ocean water?",
+            options: ["35 ppt", "25 ppt", "45 ppt", "55 ppt"],
+            correct: 0,
+          },
+          {
+            question:
+              "Which phenomenon is caused by gravitational pull of the Moon?",
+            options: ["Waves", "Tides", "Currents", "Tsunamis"],
+            correct: 1,
+          },
+          {
+            question: "What is the deepest point in the ocean?",
+            options: [
+              "Mariana Trench",
+              "Tonga Trench",
+              "Philippine Trench",
+              "Kuril Trench",
+            ],
+            correct: 0,
+          },
+          {
+            question: "What are zooplankton?",
+            options: ["Plants", "Small animals in water", "Bacteria", "Algae"],
+            correct: 1,
+          },
+          {
+            question: "Which ocean is the coldest?",
+            options: ["Atlantic", "Pacific", "Arctic", "Southern"],
+            correct: 3,
+          },
+          {
+            question: "What is coral bleaching?",
+            options: [
+              "Coral color change",
+              "Coral disease expulsion",
+              "Coral death",
+              "Coral formation",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What percentage of Earth is covered by oceans?",
+            options: ["50%", "61%", "71%", "81%"],
+            correct: 2,
+          },
+          {
+            question: "Which current is the longest ocean current?",
+            options: [
+              "Gulf Stream",
+              "Antarctic Circumpolar",
+              "Kuroshio",
+              "Humboldt",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is the thermocline?",
+            options: [
+              "Warm layer",
+              "Layer of rapid temperature change",
+              "Deep layer",
+              "Surface layer",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which organism produces most of the world's oxygen?",
+            options: ["Algae", "Phytoplankton", "Seaweed", "Fish"],
+            correct: 1,
+          },
+          {
+            question: "What is the continental shelf?",
+            options: [
+              "Ocean ridge",
+              "Shallow area near continent",
+              "Deep trench",
+              "Underwater volcano",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which fish species is endangered due to overfishing?",
+            options: ["Tuna", "Atlantic Cod", "Salmon", "All of the above"],
+            correct: 3,
+          },
+          {
+            question: "What is bioluminescence?",
+            options: [
+              "Plant photosynthesis",
+              "Light production by organisms",
+              "Reflection of light",
+              "Absorption of light",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is the aphotic zone?",
+            options: [
+              "Surface layer",
+              "Twilight zone",
+              "Zone with no light",
+              "Lighted zone",
+            ],
+            correct: 2,
+          },
+          {
+            question: "Which is a common method for marine conservation?",
+            options: [
+              "Fishing restrictions",
+              "Marine protected areas",
+              "Sustainable fishing",
+              "All of the above",
+            ],
+            correct: 3,
+          },
+          {
+            question: "What causes red tide?",
+            options: ["Iron oxide", "Algal bloom", "Sediment", "Pollution"],
+            correct: 1,
+          },
+          {
+            question: "What is hydrothermal vents known for?",
+            options: [
+              "Hot water",
+              "Unique organisms",
+              "Mineral deposits",
+              "All of the above",
+            ],
+            correct: 3,
+          },
+          {
+            question: "Which marine animal has the longest lifespan?",
+            options: ["Whale", "Sea turtle", "Shark", "Octopus"],
+            correct: 2,
+          },
+          {
+            question: "What is ocean acidification caused by?",
+            options: [
+              "Pollution",
+              "Increased CO2 absorption",
+              "Temperature rise",
+              "Overfishing",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is the mesopelagic zone known as?",
+            options: [
+              "Sunlight zone",
+              "Twilight zone",
+              "Midnight zone",
+              "Abyssal zone",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which ocean is shrinking?",
+            options: ["Atlantic", "Pacific", "Indian", "Arctic"],
+            correct: 3,
+          },
+          {
+            question: "What is the role of mangroves in marine ecosystems?",
+            options: [
+              "Food source",
+              "Breeding ground",
+              "Coastal protection",
+              "All of the above",
+            ],
+            correct: 3,
+          },
+          {
+            question: "What phenomenon kills large populations of fish?",
+            options: ["Low tide", "Anoxia", "High salinity", "Bright light"],
+            correct: 1,
+          },
+          {
+            question: "Which is the fastest marine animal?",
+            options: ["Shark", "Dolphin", "Sailfish", "Tuna"],
+            correct: 2,
+          },
+        ],
+        Agriculture: [
+          {
+            question: "What is the most grown crop worldwide?",
+            options: ["Wheat", "Rice", "Corn", "Sugarcane"],
+            correct: 2,
+          },
+          {
+            question: "Which nutrient is essential for plant growth?",
+            options: [
+              "Nitrogen",
+              "Phosphorus",
+              "Potassium",
+              "All of the above",
+            ],
+            correct: 3,
+          },
+          {
+            question:
+              "What is the process called when crops alternate between fields?",
+            options: [
+              "Monoculture",
+              "Crop rotation",
+              "Intercropping",
+              "Fallow",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is the main cause of soil erosion?",
+            options: ["Wind", "Water", "Human activity", "All of the above"],
+            correct: 3,
+          },
+          {
+            question: "Which farming method uses minimal chemicals?",
+            options: ["Conventional", "Organic", "Industrial", "Commercial"],
+            correct: 1,
+          },
+          {
+            question: "What is the normal pH range for soil?",
+            options: ["3-5", "5-7", "7-9", "9-11"],
+            correct: 1,
+          },
+          {
+            question: "What does NPK stand for?",
+            options: [
+              "Nitrogen, Phosphate, Potassium",
+              "Nitrogen, Phosphorus, Potassium",
+              "Nitrogen, Phosphite, Krypton",
+              "Nitrogen, Phosphorus, Kalium",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which season is ideal for rice cultivation?",
+            options: ["Spring", "Summer", "Monsoon", "Winter"],
+            correct: 2,
+          },
+          {
+            question: "What is the primary purpose of irrigation?",
+            options: [
+              "Cooling",
+              "Water supply to crops",
+              "Pest control",
+              "Fertilizer application",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which insect is most destructive to cotton?",
+            options: ["Armyworm", "Bollworm", "Grasshopper", "Beetle"],
+            correct: 1,
+          },
+          {
+            question: "What is sustainable agriculture focused on?",
+            options: [
+              "Maximum yield",
+              "Environmental health",
+              "Profit only",
+              "Minimal labor",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which method helps prevent waterlogging?",
+            options: ["Flooding", "Drainage", "Mulching", "Tilling"],
+            correct: 1,
+          },
+          {
+            question: "What is agroforestry?",
+            options: [
+              "Tree cutting",
+              "Forest preservation",
+              "Integration of trees and crops",
+              "Forest farming only",
+            ],
+            correct: 2,
+          },
+          {
+            question: "Which is a legume crop?",
+            options: ["Wheat", "Corn", "Lentil", "Rice"],
+            correct: 2,
+          },
+          {
+            question: "What is the main benefit of organic farming?",
+            options: [
+              "Higher yield",
+              "Environmental sustainability",
+              "Lower labor",
+              "Higher profit",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which tool is used for plowing?",
+            options: ["Sickle", "Plow", "Hoe", "Rake"],
+            correct: 1,
+          },
+          {
+            question: "What is the normal rainfall for agriculture?",
+            options: ["50 mm", "500 mm", "1000 mm", "Varies by crop"],
+            correct: 3,
+          },
+          {
+            question: "Which is a micronutrient?",
+            options: ["Nitrogen", "Phosphorus", "Iron", "Potassium"],
+            correct: 2,
+          },
+          {
+            question: "What is precision farming?",
+            options: [
+              "Manual farming",
+              "Technology-based farming",
+              "Large-scale farming",
+              "Small-scale farming",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which agricultural practice conserves water?",
+            options: [
+              "Flooding",
+              "Drip irrigation",
+              "Overhead sprinklers",
+              "Both A and C",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is the greenhouse effect in agriculture?",
+            options: [
+              "Plant growth",
+              "Temperature control",
+              "Increased CO2",
+              "Water management",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which pest requires quarantine regulations?",
+            options: ["Locusts", "Flies", "Rats", "Snails"],
+            correct: 0,
+          },
+          {
+            question: "What is biopesticide?",
+            options: [
+              "Chemical pesticide",
+              "Pesticide from organisms",
+              "Heavy metal pesticide",
+              "Synthetic pesticide",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which crop fixes nitrogen in soil?",
+            options: ["Wheat", "Rice", "Pea", "Corn"],
+            correct: 2,
+          },
+          {
+            question: "What is the main advantage of GMO crops?",
+            options: ["Taste", "Drought resistance", "Color", "Size"],
+            correct: 1,
+          },
+        ],
+        Education: [
+          {
+            question: "Who is known as the father of modern education?",
+            options: [
+              "Jean-Jacques Rousseau",
+              "Johann Pestalozzi",
+              "John Dewey",
+              "Maria Montessori",
+            ],
+            correct: 2,
+          },
+          {
+            question: "What is the primary goal of education?",
+            options: [
+              "Test scores",
+              "Overall development",
+              "Memorization",
+              "Competition",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which learning theory emphasizes experience?",
+            options: [
+              "Behaviorism",
+              "Cognitivism",
+              "Experientialism",
+              "Constructivism",
+            ],
+            correct: 3,
+          },
+          {
+            question: "What does Bloom's Taxonomy focus on?",
+            options: [
+              "Teaching methods",
+              "Cognitive levels",
+              "Assessment types",
+              "Classroom management",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which is NOT a learning style?",
+            options: ["Visual", "Auditory", "Kinesthetic", "Temporal"],
+            correct: 3,
+          },
+          {
+            question: "What is differentiated instruction?",
+            options: [
+              "Teaching all same way",
+              "Tailoring instruction to individual needs",
+              "Advanced teaching",
+              "Remedial teaching",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What does inclusive education mean?",
+            options: [
+              "Expensive education",
+              "All students learn together",
+              "Special education only",
+              "Online education",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which assessment method is formative?",
+            options: [
+              "Annual exam",
+              "Quiz during lesson",
+              "Final test",
+              "Standardized test",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is the zone of proximal development?",
+            options: [
+              "Current ability level",
+              "Gap between current and potential",
+              "Maximum ability",
+              "Minimum ability",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Who developed the Montessori method?",
+            options: ["Pestalozzi", "Maria Montessori", "Froebel", "Herbart"],
+            correct: 1,
+          },
+          {
+            question: "What is scaffolding in education?",
+            options: [
+              "Building structures",
+              "Support for learning",
+              "Curriculum design",
+              "Teacher training",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which is a characteristic of active learning?",
+            options: [
+              "Passive listening",
+              "Student engagement",
+              "Teacher-centered",
+              "Content memorization",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What does STEM stand for?",
+            options: [
+              "Science, Technology, Economics, Math",
+              "Science, Technology, Engineering, Mathematics",
+              "Skill, Teaching, Education, Math",
+              "Science, Teaching, Engineering, Methods",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is cooperative learning?",
+            options: [
+              "Individual work",
+              "Group work with shared goals",
+              "Competitive work",
+              "Independent study",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which is an example of intrinsic motivation?",
+            options: [
+              "Grades",
+              "Rewards",
+              "Interest in subject",
+              "Punishment avoidance",
+            ],
+            correct: 2,
+          },
+          {
+            question: "What is the purpose of curriculum?",
+            options: [
+              "Grade students",
+              "Guide learning outcomes",
+              "Test students",
+              "Rank schools",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What does metacognition in education involve?",
+            options: [
+              "Memory",
+              "Critical thinking about learning",
+              "Subject knowledge",
+              "Test scores",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which is a barrier to learning?",
+            options: [
+              "Good environment",
+              "Poverty",
+              "Clear instruction",
+              "Supportive peers",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is portfolio assessment?",
+            options: [
+              "Single test",
+              "Collection of student work",
+              "Teacher evaluation",
+              "Peer grading",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which teaching strategy suits visual learners?",
+            options: [
+              "Lectures",
+              "Diagrams and videos",
+              "Audio content",
+              "Group discussion",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What does UNESCO emphasize in education?",
+            options: [
+              "Profit",
+              "Access and quality",
+              "Competition",
+              "Standardization only",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is student-centered learning?",
+            options: [
+              "Teacher dominance",
+              "Focus on student interests and needs",
+              "Curriculum strict",
+              "Passive learning",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which is an advantage of technology in education?",
+            options: [
+              "No benefits",
+              "Enhanced accessibility",
+              "Student independence loss",
+              "Social isolation only",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What is the purpose of feedback in education?",
+            options: [
+              "Punishment",
+              "Guidance for improvement",
+              "Comparison only",
+              "Recording scores",
+            ],
+            correct: 1,
+          },
+          {
+            question: 'What does "learning outcome" refer to?',
+            options: [
+              "Grade given",
+              "What students will be able to do",
+              "Attendance",
+              "Participation",
+            ],
+            correct: 1,
+          },
+        ],
+      };
+
+      // State Management
+      let currentState = "homepage";
+      let currentField = "";
+      let currentQuestions = [];
+      let currentAnswers = [];
+      let currentQuestionIndex = 0;
+      let levelModalShown = false;
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", function () {
+        updateQuestionDots();
+      });
+
+      // Navigation Functions
+      function goToSelection() {
+        currentState = "quiz-selection";
+        document.getElementById("homepage").classList.add("hidden");
+        document.getElementById("quiz-selection").classList.remove("hidden");
+        document.getElementById("quiz-page").classList.add("hidden");
+        document.getElementById("results-page").classList.add("hidden");
+      }
+
+      function goToHomepage() {
+        currentState = "homepage";
+        document.getElementById("homepage").classList.remove("hidden");
+        document.getElementById("quiz-selection").classList.add("hidden");
+        document.getElementById("quiz-page").classList.add("hidden");
+        document.getElementById("results-page").classList.add("hidden");
+        currentField = "";
+        currentAnswers = [];
+        currentQuestionIndex = 0;
+        levelModalShown = false;
+      }
+
+      function startQuiz(field) {
+        currentField = field;
+        currentState = "quiz";
+        currentQuestionIndex = 0;
+        currentAnswers = [];
+
+        // Shuffle questions
+        let allQuestions = quizData[field].map((q) => ({ ...q }));
+        currentQuestions = shuffleArray(allQuestions);
+
+        document.getElementById("quiz-selection").classList.add("hidden");
+        document.getElementById("quiz-page").classList.remove("hidden");
+
+        document.getElementById("quiz-field").textContent = field + " Quiz";
+
+        showQuestion();
+      }
+
+      function shuffleArray(array) {
+        let arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+      }
+
+      function showQuestion() {
+        const question = currentQuestions[currentQuestionIndex];
+
+        document.getElementById("question-counter").textContent =
+          `Question ${currentQuestionIndex + 1} of 25`;
+        document.getElementById("progress-percentage").textContent =
+          `${Math.round((currentQuestionIndex / 25) * 100)}%`;
+        document.getElementById("progress-bar").style.width =
+          `${(currentQuestionIndex / 25) * 100}%`;
+
+        // Update level badge
+        let level;
+        if (currentQuestionIndex < 5) level = "Level 1";
+        else if (currentQuestionIndex < 10) level = "Level 2";
+        else if (currentQuestionIndex < 15) level = "Level 3";
+        else if (currentQuestionIndex < 20) level = "Level 4";
+        else level = "Level 5";
+        document.getElementById("level-badge").textContent = level;
+
+        document.getElementById("question-text").textContent =
+          question.question;
+
+        // Generate options
+        let optionsHTML = "";
+        question.options.forEach((option, index) => {
+          const isSelected = currentAnswers[currentQuestionIndex] === index;
+          optionsHTML += `
+                    <div class="option-btn cursor-pointer p-4 border-2 rounded-lg transition transform hover:scale-105 ${isSelected ? "border-purple-600 bg-purple-50" : "border-gray-300 bg-white hover:border-purple-400"}" onclick="selectAnswer(${index})">
+                        <div class="flex items-center">
+                            <div class="w-6 h-6 rounded-full border-2 mr-4 ${isSelected ? "border-purple-600 bg-purple-600" : "border-gray-400"}">
+                                ${isSelected ? '<span class="text-white text-sm flex items-center justify-center h-full">✓</span>' : ""}
+                            </div>
+                            <span class="text-gray-900">${option}</span>
+                        </div>
+                    </div>
+                `;
+        });
+        document.getElementById("options-container").innerHTML = optionsHTML;
+
+        // Update navigation buttons
+        document.getElementById("prev-btn").disabled =
+          currentQuestionIndex === 0;
+        document.getElementById("next-btn").textContent =
+          currentQuestionIndex === 24 ? "Submit Quiz →" : "Next →";
+
+        updateQuestionDots();
+      }
+
+      function selectAnswer(index) {
+        currentAnswers[currentQuestionIndex] = index;
+        showQuestion();
+      }
+
+      function nextQuestion() {
+        if (currentQuestionIndex === 24) {
+          showResults();
+          return;
+        }
+
+        // Check if we completed a level
+        if (
+          (currentQuestionIndex + 1) % 5 === 0 &&
+          currentQuestionIndex !== 24
+        ) {
+          showLevelModal();
+        }
+
+        currentQuestionIndex++;
+        showQuestion();
+      }
+
+      function previousQuestion() {
+        if (currentQuestionIndex > 0) {
+          currentQuestionIndex--;
+          showQuestion();
+        }
+      }
+
+      function showLevelModal() {
+        let level = Math.floor(currentQuestionIndex / 5) + 1;
+        const levelStart = (level - 1) * 5;
+        const levelEnd = level * 5;
+
+        let correctCount = 0;
+        for (let i = levelStart; i < levelEnd; i++) {
+          if (currentAnswers[i] === currentQuestions[i].correct) {
+            correctCount++;
+          }
+        }
+
+        document.getElementById("level-title").textContent =
+          `Level ${level} Complete!`;
+        document.getElementById("level-score").textContent =
+          `${correctCount}/5`;
+
+        document.getElementById("level-modal").classList.remove("hidden");
+        levelModalShown = true;
+      }
+
+      function closeLevelModal() {
+        document.getElementById("level-modal").classList.add("hidden");
+      }
+
+      function showResults() {
+        currentState = "results";
+        document.getElementById("quiz-page").classList.add("hidden");
+        document.getElementById("results-page").classList.remove("hidden");
+
+        let correctCount = 0;
+        currentAnswers.forEach((answer, index) => {
+          if (answer === currentQuestions[index].correct) {
+            correctCount++;
+          }
+        });
+
+        const percentage = Math.round((correctCount / 25) * 100);
+        const wrongCount = 25 - correctCount;
+
+        document.getElementById("final-score").textContent =
+          `${correctCount}/25`;
+        document.getElementById("score-percentage").textContent =
+          `${percentage}%`;
+        document.getElementById("final-progress-bar").style.width =
+          `${percentage}%`;
+        document.getElementById("correct-count").textContent = correctCount;
+        document.getElementById("wrong-count").textContent = wrongCount;
+
+        let performance = "Excellent";
+        if (percentage < 50) performance = "Needs Improvement";
+        else if (percentage < 70) performance = "Good";
+        else if (percentage < 85) performance = "Very Good";
+
+        document.getElementById("performance").textContent = performance;
+
+        // Display all questions
+        let reviewHTML = "";
+        currentQuestions.forEach((question, index) => {
+          const userAnswer = currentAnswers[index];
+          const isCorrect = userAnswer === question.correct;
+          const backgroundColor = isCorrect ? "bg-green-50" : "bg-red-50";
+          const borderColor = isCorrect ? "border-green-500" : "border-red-500";
+          const textColor = isCorrect ? "text-green-700" : "text-red-700";
+
+          reviewHTML += `
+                    <div class="bg-white border-l-4 ${borderColor} rounded-lg p-6 ${backgroundColor}">
+                        <div class="flex items-start justify-between mb-3">
+                            <h3 class="font-bold text-gray-900">Q${index + 1}: ${question.question}</h3>
+                            <span class="ml-2 px-3 py-1 rounded-full text-sm font-bold ${isCorrect ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"}">
+                                ${isCorrect ? "✓ Correct" : "✗ Wrong"}
+                            </span>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-gray-700"><strong>Your Answer:</strong> ${question.options[userAnswer]}</p>
+                            ${!isCorrect ? `<p class="text-green-700 font-semibold"><strong>Correct Answer:</strong> ${question.options[question.correct]}</p>` : ""}
+                        </div>
+                    </div>
+                `;
+        });
+        document.getElementById("review-container").innerHTML = reviewHTML;
+      }
+
+      function tryDifferentQuiz() {
+        goToSelection();
+        currentAnswers = [];
+        currentQuestionIndex = 0;
+        levelModalShown = false;
+      }
+
+      function updateQuestionDots() {
+        let dotsHTML = "";
+        for (let i = 0; i < 25; i++) {
+          const isAnswered = currentAnswers[i] !== undefined;
+          const isCurrent = i === currentQuestionIndex;
+          const className = isCurrent
+            ? "bg-purple-600"
+            : isAnswered
+              ? "bg-green-500"
+              : "bg-gray-300";
+          dotsHTML += `<div class="w-3 h-3 rounded-full ${className} cursor-pointer transition hover:scale-125" onclick="jumpToQuestion(${i})"></div>`;
+        }
+        const container = document.getElementById("question-dots");
+        if (container) {
+          container.innerHTML = dotsHTML;
+        }
+      }
+
+      function jumpToQuestion(index) {
+        currentQuestionIndex = index;
+        showQuestion();
+      }
+    </script>
+  </body>
+</html>
